@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chalés Morada do Sol PETAR | Oficial</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- Ícones -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        royalBlue: '#1e3a8a',
+                        sunYellow: '#f59e0b',
+                        natureGreen: '#15803d',
+                        skyBlue: '#0ea5e9',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Animação de Entrada (Scroll) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Vidro */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30, 58, 138, 0.85) 100%);
+        }
+        
+        /* ESTILOS DO ACORDEÃO (CORRIGIDO) */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+        }
+        /* Classe exclusiva para quando está aberto */
+        .accordion-item.accordion-open .accordion-content {
+            opacity: 1;
+            /* Max-height é controlado via JS */
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-item.accordion-open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-item.accordion-open .accordion-header {
+            color: #1e3a8a; /* royalBlue */
+        }
+
+        /* Fallback para imagens */
+        .img-fallback {
+            @apply absolute inset-0 flex flex-col items-center justify-center bg-slate-200 text-slate-500 font-bold uppercase text-[10px] text-center p-4 z-0;
+        }
+
+        /* CARROSSEL INFINITO */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-300px * 10)); }
+        }
+        .slider {
+            background: white;
+            height: 350px;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+        .slider .slide-track {
+            animation: scroll 40s linear infinite;
+            display: flex;
+            width: calc(300px * 20);
+        }
+        .slider .slide {
+            height: 350px;
+            width: 300px;
+            padding: 10px;
+            flex-shrink: 0;
+        }
+        .slider:hover .slide-track {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans leading-relaxed">
+
+    <!-- WHATSAPP FIXO -->
+    <a href="https://wa.me/5515998200523" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 group">
+        <i data-lucide="message-circle" class="w-8 h-8"></i>
+        <span class="absolute right-full mr-4 bg-white text-royalBlue px-4 py-2 rounded-xl text-xs font-black shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
+            Consultar Disponibilidade
+        </span>
+    </a>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-500 py-4 lg:py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass border border-white/20 rounded-full px-6 py-2 flex justify-between items-center shadow-xl shadow-black/5">
+                <div class="flex items-center gap-3">
+                    <div class="relative w-12 h-12 rounded-full overflow-hidden border-2 border-sunYellow bg-royalBlue shrink-0">
+                        <img src="imagens/logopousada.jpg" alt="Logo" class="relative z-10 w-full h-full object-cover">
+                        <div class="absolute inset-0 flex items-center justify-center text-[8px] text-white font-bold bg-royalBlue uppercase">LOGO</div>
+                    </div>
+                    <div>
+                        <span class="font-heading font-black text-royalBlue text-lg leading-none block tracking-tighter uppercase">Chalés Morada do Sol PETAR</span>
+                        <span class="text-sunYellow text-[10px] font-black uppercase tracking-[0.2em]">Pousada no Petar</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8 text-sm font-bold">
+                    <a href="#home" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest">Início</a>
+                    <a href="#acomodacoes" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest">Acomodações</a>
+                    <a href="#faq" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest text-xs">Dúvidas</a>
+                    <a href="https://wa.me/5515998200523" class="bg-royalBlue text-white px-6 py-3 rounded-full hover:bg-blue-900 transition-all shadow-lg text-xs uppercase">
+                        Consultar Disponibilidade
+                    </a>
+                </div>
+
+                <button id="menuBtn" class="md:hidden p-2 text-royalBlue">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobileMenu" class="hidden md:hidden absolute top-24 left-4 right-4 bg-white rounded-[2rem] p-8 shadow-2xl border border-slate-100 space-y-6">
+            <a href="#home" class="block font-black text-xl">Início</a>
+            <a href="#acomodacoes" class="block font-black text-xl">Acomodações</a>
+            <a href="#faq" class="block font-black text-xl">Dúvidas Frequentes</a>
+            <a href="https://wa.me/5515998200523" class="block bg-sunYellow text-white text-center py-4 rounded-2xl font-black shadow-lg">CONSULTAR DISPONIBILIDADE</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-royalBlue text-center px-6">
+        <img src="imagens/imagemprincipal.png" alt="Cenário PETAR" class="absolute inset-0 w-full h-full object-cover z-0">
+        <div class="hero-overlay absolute inset-0 z-10"></div>
+        
+        <div class="relative z-20 max-w-5xl mx-auto">
+            <h1 class="reveal active font-heading text-4xl md:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tighter drop-shadow-2xl text-center">
+                Hospede-se no coração do <span class="text-sunYellow italic">PETAR</span>, e encante-se com as paisagens naturais!
+            </h1>
+            
+            <p class="reveal active text-lg md:text-2xl text-blue-50/90 mb-12 font-medium max-w-3xl mx-auto leading-relaxed">
+                Oferecemos hospedagem, orientação e total suporte para que você explore os melhores roteiros da região!
+            </p>
+            
+            <div class="reveal active flex justify-center">
+                <a href="https://wa.me/5515998200523" class="bg-sunYellow text-white px-12 py-5 rounded-full text-lg font-black hover:bg-amber-600 transition-all shadow-2xl flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95 uppercase tracking-widest">
+                    Consultar Disponibilidade <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORY TEXT -->
+    <section class="py-24 bg-white border-b px-6">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <p class="text-xl md:text-3xl text-slate-700 font-medium leading-relaxed italic mb-8">
+                "Depois de passar o dia no PETAR, nada melhor do que voltar pro chalé e curtir a noite com calma. As crianças se divertem assando marshmallow, os adultos relaxam, e todo mundo aproveita o tempo junto, sem pressa e sem barulho."
+            </p>
+            <span class="bg-royalBlue/5 text-royalBlue px-6 py-2 rounded-full font-black text-xs uppercase tracking-widest">
+                Chalés Morada do Sol PETAR aventura garantida
+            </span>
+        </div>
+    </section>
+
+    <!-- ACOMODAÇÕES -->
+    <section id="acomodacoes" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="reveal text-center mb-20">
+            <h2 class="font-heading text-4xl md:text-5xl font-black text-royalBlue mb-6 tracking-tighter uppercase">Nossas Acomodações</h2>
+            <div class="w-20 h-2 bg-sunYellow mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            
+            <!-- Kitenet -->
+            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div class="relative h-64 bg-slate-200 overflow-hidden">
+                    <img src="imagens/quarto-kitenet.jpg" alt="Kitenet" class="relative z-10 w-full h-full object-cover">
+                    <div class="img-fallback">foto: quarto-kitenet.jpg</div>
+                </div>
+                <div class="p-8 flex-grow flex flex-col text-left">
+                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Kitenet - terraço</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas. Mínimo de 3 diárias para reserva.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi sim</li>
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="bed" class="w-4 h-4 text-sunYellow"></i> Cama 6</li>
+                    </ul>
+                    <div class="mb-6 flex justify-between items-end border-t pt-4">
+                        <span class="text-2xl font-black text-natureGreen">R$ 250,00</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
+                    </div>
+                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                </div>
+            </div>
+
+            <!-- Quádruplo -->
+            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div class="relative h-64 bg-slate-200 overflow-hidden">
+                    <img src="imagens/quarto-quadruplo.jpg" alt="Quádruplo" class="relative z-10 w-full h-full object-cover">
+                    <div class="img-fallback">foto: quarto-quadruplo.jpg</div>
+                </div>
+                <div class="p-8 flex-grow flex flex-col text-left">
+                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Quádruplo Superior</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto Quádruplo andar superior com uma visita linda para o jardim e a mata atlântica. Grupos de até 4 pessoas. Mínimo de 3 dias a diária.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi sim</li>
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="layers" class="w-4 h-4 text-sunYellow"></i> 4 beliches</li>
+                    </ul>
+                    <div class="mb-6 flex justify-between items-end border-t pt-4">
+                        <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
+                    </div>
+                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                </div>
+            </div>
+
+            <!-- Família -->
+            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div class="relative h-64 bg-slate-200 overflow-hidden">
+                    <img src="imagens/quarto-familia.jpg" alt="Família" class="relative z-10 w-full h-full object-cover">
+                    <div class="img-fallback">foto: quarto-familia.jpg</div>
+                </div>
+                <div class="p-8 flex-grow flex flex-col text-left">
+                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Família Superior</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto família andar superior. Sinta tranquilidade e o charme desse lugar. Ideal para família ou grupo de até 4 pessoas.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi</li>
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="bed-double" class="w-4 h-4 text-sunYellow"></i> Cama 3</li>
+                    </ul>
+                    <div class="mb-6 flex justify-between items-end border-t pt-4">
+                        <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Valor Fixo</span>
+                    </div>
+                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                </div>
+            </div>
+
+            <!-- Casal -->
+            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div class="relative h-64 bg-slate-200 overflow-hidden">
+                    <img src="imagens/quarto-casal.jpg" alt="Casal" class="relative z-10 w-full h-full object-cover">
+                    <div class="img-fallback">foto: quarto-casal.jpg</div>
+                </div>
+                <div class="p-8 flex-grow flex flex-col text-left">
+                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Suíte Casal</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Suíte casal andar superior. Romantismo flores pássaros natureza beleza encantadora. Diárias de no mínimo 3 dias.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="heart" class="w-4 h-4 text-red-500"></i> Wifi</li>
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="star" class="w-4 h-4 text-sunYellow"></i> 1 Cama</li>
+                    </ul>
+                    <div class="mb-6 flex justify-between items-end border-t pt-4">
+                        <span class="text-2xl font-black text-natureGreen">R$ 500.00</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Valor p/ casal</span>
+                    </div>
+                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20">Reserva agora</a>
+                </div>
+            </div>
+
+            <!-- Camping -->
+            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+                <div class="relative h-64 bg-slate-200 overflow-hidden">
+                    <img src="imagens/area-camping.jpg" alt="Camping" class="relative z-10 w-full h-full object-cover">
+                    <div class="img-fallback">foto: area-camping.jpg</div>
+                </div>
+                <div class="p-8 flex-grow flex flex-col text-left">
+                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Camping</h3>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Temos o espaço ideal pra vocês aventureiro desbravadores cercado de muro privacidade total em meio a natureza.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="tent" class="w-4 h-4 text-natureGreen"></i> Área Ampla</li>
+                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="shield-check" class="w-4 h-4 text-natureGreen"></i> Wifi sim</li>
+                    </ul>
+                    <div class="mb-6 flex justify-between items-end border-t pt-4">
+                        <span class="text-2xl font-black text-natureGreen">R$ 80,00</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">A Diária</span>
+                    </div>
+                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-natureGreen text-white font-black py-4 rounded-2xl hover:bg-green-800 transition-all shadow-xl shadow-natureGreen/20">Reserva agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIA (CARROSSEL AUTOMÁTICO LENTO) -->
+    <section class="py-24 px-6 bg-slate-200 border-t overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="reveal font-heading text-4xl font-black text-royalBlue text-center mb-16 uppercase tracking-tighter">Galeria de Fotos</h2>
+            
+            <div class="slider">
+                <div class="slide-track">
+                    <!-- Slides (1-10) -->
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
+                    <!-- Duplicate for infinite loop -->
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION (ACORDEÃO CORRIGIDO) -->
+    <section id="faq" class="py-24 bg-white px-6 border-t">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="reveal font-heading text-4xl font-black text-royalBlue mb-16 tracking-tighter uppercase text-center">Dúvidas Frequentes</h2>
+
+            <div class="space-y-4">
+                
+                <!-- 1. Política de cancelamento -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">1. Política de cancelamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
+                            <p>Cancelamento com até 15 dias da data de entrada – devolução integral do valor do sinal</p>
+                            <p>Cancelamento de 7 à 14 dias da data de entrada – devolução de 50% do sinal ou crédito de 100% para reagendar outra data;</p>
+                            <p>Cancelamento menos de 6 dias da data de entrada – reembolso de 0% do sinal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Localização -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">2. Aonde estamos localizados?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
+                            <p>Estamos no coração do PETAR 💚</p>
+                            <p>📍 Estr. do Alambari, 565 – Serra, Iporanga/SP</p>
+                            <p>Pertinho das cavernas Ouro Grosso e Alambari, e a poucos minutos do Parque do PETAR, onde estão as principais cavernas e cachoeiras da região.</p>
+                            <p>Um refúgio rodeado pela Mata Atlântica e bem no coração das aventuras do PETAR!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Pet Friendly -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">3. Pet Friendly com algumas regrinhas!</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
+                            <p>Animais de pequeno porte são bem-vindos 💛</p>
+                            <p>Só pedimos que fiquem sempre com os tutores e <strong>não subam em camas ou sofás</strong>.</p>
+                            <p>Traga caminha, potes e fraldinha para seu pet.</p>
+                            <p>Lembre-se também de recolher as sujeirinhas e manter o espaço limpinho.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Trabalho -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">4. Precisa trabalhar durante a estadia?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
+                            <p>Temos wi-fi e mesas confortáveis pra você se conectar, fazer reuniões ou colocar o trabalho em dia com toda tranquilidade.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Alimentos -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">5. Posso levar alimentos e bebidas?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
+                            <p class="font-bold text-natureGreen mb-2">PODE SIM!</p>
+                            <p>Fique à vontade para trazer seus alimentos e bebidas e aproveitar seus momentos no chalé do jeitinho que preferir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Pagamento -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">6. Formas de pagamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
+                            <p>Aceitamos pagamentos em PIX, cartão de débito e crédito.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Horário -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">7. Horário de funcionamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
+                            <p>Reservas: atendimento das 8h às 21h00</p>
+                            <p>Café da manhã: das 7h às 9h</p>
+                            <p>Estamos por aqui prontos pra te receber com carinho e um café quentinho pra começar bem o dia!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Contato -->
+                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">8. Como entrar em contato?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
+                            <p>Estamos prontos para atende-los!</p>
+                            <p>Nos envie uma mensagem PELO WHATSAPP</p>
+                            <a href="https://wa.me/5515998200523" target="_blank" class="inline-block mt-2 text-natureGreen font-black hover:underline uppercase tracking-wider text-xs">🔗 FAÇA A SUA RESERVA AQUI 💚</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="localizacao" class="bg-slate-900 text-slate-500 py-24 px-6 border-t border-white/5 text-center md:text-left">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-16 border-b border-slate-800 pb-16 mb-16">
+            <div>
+                <div class="flex items-center gap-3 mb-8 justify-center md:justify-start">
+                    <div class="relative w-10 h-10 rounded-full overflow-hidden border border-white/20 p-0.5 bg-royalBlue">
+                        <img src="imagens/logopousada.jpg" alt="Logo Footer" class="relative z-10 w-full h-full object-cover">
+                    </div>
+                    <span class="font-heading font-black text-white text-xl uppercase tracking-tighter">Chalés Morada do Sol PETAR</span>
+                </div>
+                <p class="text-[10px] font-black tracking-[0.3em] uppercase opacity-50 italic leading-relaxed max-w-xs mx-auto md:mx-0">Momentos românticos na morada do sol com gostinho de lua de mel</p>
+            </div>
+            
+            <div class="space-y-6">
+                <h5 class="text-white font-black text-xs uppercase tracking-[0.4em]">Localização</h5>
+                <p class="text-sm font-bold text-slate-300 italic">📍 Estr. do Alambari, 565 – Serra, Iporanga/SP</p>
+                <a href="https://maps.app.goo.gl/uA6iXMHxfv1Hni4F7" target="_blank" class="inline-block mt-2 text-sunYellow font-black hover:underline italic tracking-widest text-[10px]">ABRIR NO GOOGLE MAPS</a>
+            </div>
+            
+            <div class="space-y-8 text-left">
+                <h5 class="text-white font-black text-xs uppercase tracking-[0.4em] text-center md:text-left">Contacto Direto</h5>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 justify-center md:justify-start text-white">
+                        <i data-lucide="phone" class="w-4 h-4 text-sunYellow"></i>
+                        <span class="text-sm font-black">(15) 99820-0523</span>
+                    </div>
+                    <div class="flex items-center gap-4 justify-center md:justify-start text-white">
+                        <i data-lucide="instagram" class="w-4 h-4 text-sunYellow"></i>
+                        <a href="https://www.instagram.com/moradadosolpetar" target="_blank" class="text-sm font-black hover:text-sunYellow transition-colors tracking-tight">@moradadosolpetar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-[9px] uppercase tracking-[0.4em] font-black opacity-30 text-center flex flex-col md:flex-row justify-between gap-4 mt-8">
+            <p>© 2026 Chalés Morada do Sol PETAR - @_pousadachalemoradosol</p>
+            <p>Aventura e Tranquilidade no PETAR</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // FAQ Logic - REFEITO para garantir funcionamento
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isActive = item.classList.contains('accordion-open');
+
+                // Fecha todos os outros itens
+                document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('accordion-open');
+                        otherItem.querySelector('.accordion-content').style.maxHeight = null;
+                        otherItem.querySelector('.accordion-content').style.opacity = 0;
+                    }
+                });
+
+                // Toggle do item atual
+                if (isActive) {
+                    item.classList.remove('accordion-open');
+                    item.querySelector('.accordion-content').style.maxHeight = null;
+                    item.querySelector('.accordion-content').style.opacity = 0;
+                } else {
+                    item.classList.add('accordion-open');
+                    const content = item.querySelector('.accordion-content');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.style.opacity = 1;
+                }
+            });
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 80) nav.classList.add('py-2');
+            else nav.classList.remove('py-2');
+        });
+    </script>
+</body>
+</html>
