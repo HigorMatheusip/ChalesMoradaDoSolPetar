@@ -79,33 +79,26 @@
             @apply absolute inset-0 flex flex-col items-center justify-center bg-slate-200 text-slate-500 font-bold uppercase text-[10px] text-center p-4 z-0;
         }
 
-        /* CARROSSEL DRAGGABLE (ARRASTÁVEL) */
+        /* CARROSSEL DRAGGABLE */
         .gallery-wrapper {
-            overflow-x: hidden; /* Esconde a barra de rolagem */
+            overflow-x: hidden;
             white-space: nowrap;
-            cursor: grab; /* Mãozinha para indicar que pode arrastar */
+            cursor: grab;
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-y; /* Permite scroll vertical da página */
         }
         .gallery-wrapper:active {
-            cursor: grabbing; /* Mãozinha fechada ao arrastar */
+            cursor: grabbing;
         }
         .gallery-track {
             display: inline-flex;
             gap: 1rem;
-            padding-bottom: 20px; /* Espaço para sombra */
+            padding-bottom: 20px;
         }
         .gallery-item {
-            flex: 0 0 300px; /* Largura fixa do card */
+            flex: 0 0 300px;
             height: 300px;
-            user-select: none; /* Impede seleção de texto ao arrastar */
-        }
-        /* Esconder scrollbar padrão */
-        .gallery-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-        .gallery-wrapper {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -208,10 +201,12 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Kitenet - terraço</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas. Mínimo de 3 diárias para reserva.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi sim</li>
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="bed" class="w-4 h-4 text-sunYellow"></i> Cama 6</li>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
+                        <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-royalBlue"></i> 6 Camas</li>
+                        <li class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-royalBlue"></i> Cozinha equipada</li>
+                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
                         <span class="text-2xl font-black text-natureGreen">R$ 250,00</span>
@@ -231,10 +226,12 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Quádruplo Superior</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto Quádruplo andar superior com uma visita linda para o jardim e a mata atlântica. Grupos de até 4 pessoas. Mínimo de 3 dias a diária.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi sim</li>
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="layers" class="w-4 h-4 text-sunYellow"></i> 4 beliches</li>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto Quádruplo andar superior com uma visita linda para o jardim e a mata atlântica. Grupos de até 4 pessoas.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
+                        <li class="flex items-center gap-3"><i data-lucide="bed-double" class="w-5 h-5 text-royalBlue"></i> 4 Beliches</li>
+                        <li class="flex items-center gap-3"><i data-lucide="flower-2" class="w-5 h-5 text-royalBlue"></i> Vista Jardim</li>
+                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
                         <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
@@ -254,10 +251,11 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Família Superior</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto família andar superior. Sinta tranquilidade e o charme desse lugar. Ideal para família ou grupo de até 4 pessoas.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="wifi" class="w-4 h-4 text-sunYellow"></i> Wifi</li>
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="bed-double" class="w-4 h-4 text-sunYellow"></i> Cama 3</li>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Sinta tranquilidade e o charme desse lugar. Ideal para família ou grupo de até 4 pessoas.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
+                        <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-royalBlue"></i> 3 Camas</li>
+                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
                         <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
@@ -277,13 +275,15 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Suíte Casal</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Suíte casal andar superior. Romantismo flores pássaros natureza beleza encantadora. Diárias de no mínimo 3 dias.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="heart" class="w-4 h-4 text-red-500"></i> Wifi</li>
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="star" class="w-4 h-4 text-sunYellow"></i> 1 Cama</li>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Romantismo, flores, pássaros, natureza e beleza encantadora.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
+                        <li class="flex items-center gap-3"><i data-lucide="heart" class="w-5 h-5 text-royalBlue"></i> 1 Cama Casal</li>
+                        <li class="flex items-center gap-3"><i data-lucide="flower" class="w-5 h-5 text-royalBlue"></i> Vista Natureza</li>
+                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 500.00</span>
+                        <span class="text-2xl font-black text-natureGreen">R$ 500,00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Valor p/ casal</span>
                     </div>
                     <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Su%C3%ADte%20Casal*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20 flex justify-center items-center gap-2">
@@ -300,10 +300,11 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Camping</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Temos o espaço ideal pra vocês aventureiro desbravadores cercado de muro privacidade total em meio a natureza.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-black flex-grow">
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="tent" class="w-4 h-4 text-natureGreen"></i> Área Ampla</li>
-                        <li class="flex items-center gap-3 italic font-medium"><i data-lucide="shield-check" class="w-4 h-4 text-natureGreen"></i> Wifi sim</li>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Espaço ideal para aventureiros desbravadores, cercado de muro, privacidade total em meio a natureza.</p>
+                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
+                        <li class="flex items-center gap-3"><i data-lucide="tent" class="w-5 h-5 text-royalBlue"></i> Área Ampla</li>
+                        <li class="flex items-center gap-3"><i data-lucide="shield-check" class="w-5 h-5 text-royalBlue"></i> Cercado</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
                         <span class="text-2xl font-black text-natureGreen">R$ 80,00</span>
@@ -357,9 +358,10 @@
             <h2 class="reveal font-heading text-4xl font-black text-royalBlue mb-16 tracking-tighter uppercase text-center">Dúvidas Frequentes</h2>
 
             <div class="space-y-4">
-                <!-- 1 -->
+                
+                <!-- 1. Política de cancelamento -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">1. Política de cancelamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -371,9 +373,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 2 -->
+
+                <!-- 2. Localização -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">2. Aonde estamos localizados?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -386,9 +389,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 3 -->
+
+                <!-- 3. Pet Friendly -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">3. Pet Friendly com algumas regrinhas!</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -401,9 +405,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 4 -->
+
+                <!-- 4. Trabalho -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">4. Precisa trabalhar durante a estadia?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -413,9 +418,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 5 -->
+
+                <!-- 5. Alimentos -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">5. Posso levar alimentos e bebidas?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -426,9 +432,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 6 -->
+
+                <!-- 6. Pagamento -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">6. Formas de pagamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -438,9 +445,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 7 -->
+
+                <!-- 7. Horário -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">7. Horário de funcionamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -452,9 +460,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- 8 -->
+
+                <!-- 8. Contato -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">8. Como entrar em contato?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -466,6 +475,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -561,6 +571,8 @@
 
         // LÓGICA DO CARROSSEL HÍBRIDO (AUTO + DRAG)
         const container = document.getElementById('gallery-container');
+        const track = document.getElementById('gallery-track');
+        
         let isDown = false;
         let startX;
         let scrollLeft;
@@ -585,14 +597,13 @@
             container.classList.add('active');
             startX = e.pageX - container.offsetLeft;
             scrollLeft = container.scrollLeft;
-            cancelAnimationFrame(animationId); // Pausa a animação ao clicar
+            // Não paramos o loop, apenas bloqueamos o autoScroll via flag
         });
 
         container.addEventListener('mouseleave', () => {
             isDown = false;
             isHovered = false;
             container.classList.remove('active');
-            requestAnimationFrame(autoScroll); // Retoma
         });
 
         container.addEventListener('mouseenter', () => {
@@ -602,8 +613,6 @@
         container.addEventListener('mouseup', () => {
             isDown = false;
             container.classList.remove('active');
-            // Retoma a animação se o mouse sair ou soltar
-            if (!isHovered) requestAnimationFrame(autoScroll);
         });
 
         container.addEventListener('mousemove', (e) => {
@@ -614,12 +623,27 @@
             container.scrollLeft = scrollLeft - walk;
         });
 
-        // Eventos de Toque (Mobile) - Mantém nativo mas controla pause
-        container.addEventListener('touchstart', () => {
-            isHovered = true;
+        // Eventos de Toque (Mobile)
+        container.addEventListener('touchstart', (e) => {
+            isDown = true;
+            isHovered = true; // Pause auto scroll
+            startX = e.touches[0].pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            cancelAnimationFrame(animationId);
         });
+
         container.addEventListener('touchend', () => {
-            isHovered = false;
+            isDown = false;
+            isHovered = false; // Resume auto scroll
+            requestAnimationFrame(autoScroll);
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            // e.preventDefault(); // Comentado para permitir scroll vertical da página se o gesto for vertical
+            const x = e.touches[0].pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeft - walk;
         });
 
         // Inicia o loop
