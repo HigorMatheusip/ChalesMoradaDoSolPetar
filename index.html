@@ -55,22 +55,21 @@
         }
         
         /* ACORDEÃO (FAQ) FUNCIONAL */
-        .accordion-content {
+        .faq-answer {
             max-height: 0;
             overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease;
+            transition: max-height 0.4s ease-out;
         }
-        .accordion-item.accordion-open .accordion-content {
-            opacity: 1;
+        .faq-card.open .faq-answer {
+            /* max-height é setado via JS */
         }
-        .accordion-icon {
-            transition: transform 0.3s ease;
-        }
-        .accordion-item.accordion-open .accordion-icon {
+        .faq-card.open .faq-icon {
             transform: rotate(180deg);
         }
-        .accordion-item.accordion-open .accordion-header {
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-card.open .faq-question {
             color: #1e3a8a;
         }
 
@@ -85,7 +84,7 @@
             white-space: nowrap;
             cursor: grab;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-y; /* Permite scroll vertical da página */
+            touch-action: pan-y;
         }
         .gallery-wrapper:active {
             cursor: grabbing;
@@ -201,7 +200,7 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Kitenet - terraço</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas.</p>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas. Mínimo de 3 diárias para reserva.</p>
                     <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
                         <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
                         <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-royalBlue"></i> 6 Camas</li>
@@ -275,7 +274,7 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Suíte Casal</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Romantismo, flores, pássaros, natureza e beleza encantadora.</p>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Suíte casal andar superior. Romantismo flores pássaros natureza beleza encantadora.</p>
                     <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
                         <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
                         <li class="flex items-center gap-3"><i data-lucide="heart" class="w-5 h-5 text-royalBlue"></i> 1 Cama Casal</li>
@@ -283,7 +282,7 @@
                         <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 500,00</span>
+                        <span class="text-2xl font-black text-natureGreen">R$ 500.00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Valor p/ casal</span>
                     </div>
                     <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Su%C3%ADte%20Casal*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20 flex justify-center items-center gap-2">
@@ -300,11 +299,11 @@
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
                     <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Camping</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Espaço ideal para aventureiros desbravadores, cercado de muro, privacidade total em meio a natureza.</p>
+                    <p class="text-sm text-slate-600 mb-6 font-medium">Temos o espaço ideal pra vocês aventureiro desbravadores cercado de muro privacidade total em meio a natureza.</p>
                     <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
                         <li class="flex items-center gap-3"><i data-lucide="tent" class="w-5 h-5 text-royalBlue"></i> Área Ampla</li>
                         <li class="flex items-center gap-3"><i data-lucide="shield-check" class="w-5 h-5 text-royalBlue"></i> Cercado</li>
+                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
                     </ul>
                     <div class="mb-6 flex justify-between items-end border-t pt-4">
                         <span class="text-2xl font-black text-natureGreen">R$ 80,00</span>
@@ -352,20 +351,20 @@
         </div>
     </section>
 
-    <!-- FAQ SECTION -->
+    <!-- FAQ SECTION (CORRIGIDA) -->
     <section id="faq" class="py-24 bg-white px-6 border-t">
         <div class="max-w-4xl mx-auto">
             <h2 class="reveal font-heading text-4xl font-black text-royalBlue mb-16 tracking-tighter uppercase text-center">Dúvidas Frequentes</h2>
 
             <div class="space-y-4">
                 
-                <!-- 1. Política de cancelamento -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">1. Política de cancelamento</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 1 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">1. Política de cancelamento</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Cancelamento com até 15 dias da data de entrada – devolução integral do valor do sinal</p>
                             <p>Cancelamento de 7 à 14 dias da data de entrada – devolução de 50% do sinal ou crédito de 100% para reagendar outra data;</p>
@@ -374,13 +373,13 @@
                     </div>
                 </div>
 
-                <!-- 2. Localização -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">2. Aonde estamos localizados?</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 2 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">2. Aonde estamos localizados?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Estamos no coração do PETAR 💚</p>
                             <p>📍 Estr. do Alambari, 565 – Serra, Iporanga/SP</p>
@@ -390,13 +389,13 @@
                     </div>
                 </div>
 
-                <!-- 3. Pet Friendly -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">3. Pet Friendly com algumas regrinhas!</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 3 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">3. Pet Friendly com algumas regrinhas!</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Animais de pequeno porte são bem-vindos 💛</p>
                             <p>Só pedimos que fiquem sempre com os tutores e <strong>não subam em camas ou sofás</strong>.</p>
@@ -406,26 +405,26 @@
                     </div>
                 </div>
 
-                <!-- 4. Trabalho -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">4. Precisa trabalhar durante a estadia?</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 4 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">4. Precisa trabalhar durante a estadia?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p>Temos wi-fi e mesas confortáveis pra você se conectar, fazer reuniões ou colocar o trabalho em dia com toda tranquilidade.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5. Alimentos -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">5. Posso levar alimentos e bebidas?</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 5 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">5. Posso levar alimentos e bebidas?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p class="font-bold text-natureGreen mb-2">PODE SIM!</p>
                             <p>Fique à vontade para trazer seus alimentos e bebidas e aproveitar seus momentos no chalé do jeitinho que preferir.</p>
@@ -433,26 +432,26 @@
                     </div>
                 </div>
 
-                <!-- 6. Pagamento -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">6. Formas de pagamento</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 6 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">6. Formas de pagamento</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p>Aceitamos pagamentos em PIX, cartão de débito e crédito.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 7. Horário -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">7. Horário de funcionamento</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 7 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">7. Horário de funcionamento</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Reservas: atendimento das 8h às 21h00</p>
                             <p>Café da manhã: das 7h às 9h</p>
@@ -461,13 +460,13 @@
                     </div>
                 </div>
 
-                <!-- 8. Contato -->
-                <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">8. Como entrar em contato?</span>
-                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
+                <!-- 8 -->
+                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">8. Como entrar em contato?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
                     </button>
-                    <div class="accordion-content">
+                    <div class="faq-answer">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Estamos prontos para atende-los!</p>
                             <p>Nos envie uma mensagem PELO WHATSAPP</p>
@@ -532,25 +531,19 @@
         // FAQ Toggle
         function toggleFaq(button) {
             const item = button.parentElement;
-            const isActive = item.classList.contains('accordion-open');
-            
-            document.querySelectorAll('.accordion-item').forEach(el => {
-                if (el !== item) {
-                    el.classList.remove('accordion-open');
-                    el.querySelector('.accordion-content').style.maxHeight = null;
-                    el.querySelector('.accordion-content').style.opacity = 0;
-                }
+            const content = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+
+            // Fechar todos
+            document.querySelectorAll('.faq-card').forEach(card => {
+                card.classList.remove('open');
+                card.querySelector('.faq-answer').style.maxHeight = null;
             });
-            
-            if (isActive) {
-                item.classList.remove('accordion-open');
-                item.querySelector('.accordion-content').style.maxHeight = null;
-                item.querySelector('.accordion-content').style.opacity = 0;
-            } else {
-                item.classList.add('accordion-open');
-                const content = item.querySelector('.accordion-content');
+
+            // Abrir o clicado
+            if (!isOpen) {
+                item.classList.add('open');
                 content.style.maxHeight = content.scrollHeight + "px";
-                content.style.opacity = 1;
             }
         }
 
@@ -562,7 +555,7 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Navbar Style
+        // Navbar Style on Scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 80) nav.classList.add('py-2');
