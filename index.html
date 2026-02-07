@@ -33,7 +33,7 @@
     </script>
     
     <style>
-        /* Animação de Entrada (Scroll) */
+        /* ANIMAÇÃO DE ENTRADA */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -44,28 +44,26 @@
             transform: translateY(0);
         }
 
-        /* Vidro */
+        /* VIDRO E FUNDO */
         .glass {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-        
         .hero-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30, 58, 138, 0.85) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30, 58, 138, 0.9) 100%);
         }
         
-        /* ESTILOS DO ACORDEÃO (CORRIGIDO) */
+        /* ACORDEÃO (FAQ) FUNCIONAL */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
             opacity: 0;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease;
         }
-        /* Classe exclusiva para quando está aberto */
         .accordion-item.accordion-open .accordion-content {
             opacity: 1;
-            /* Max-height é controlado via JS */
+            /* Max-height definido via JS */
         }
         .accordion-icon {
             transition: transform 0.3s ease;
@@ -74,10 +72,10 @@
             transform: rotate(180deg);
         }
         .accordion-item.accordion-open .accordion-header {
-            color: #1e3a8a; /* royalBlue */
+            color: #1e3a8a;
         }
 
-        /* Fallback para imagens */
+        /* FALLBACK PARA IMAGENS */
         .img-fallback {
             @apply absolute inset-0 flex flex-col items-center justify-center bg-slate-200 text-slate-500 font-bold uppercase text-[10px] text-center p-4 z-0;
         }
@@ -114,10 +112,10 @@
 <body class="bg-slate-50 text-slate-900 font-sans leading-relaxed">
 
     <!-- WHATSAPP FIXO -->
-    <a href="https://wa.me/5515998200523" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 group">
+    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Estou%20no%20site%20e%20gostaria%20de%20consultar%20disponibilidade%20para%20uma%20data." target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 group">
         <i data-lucide="message-circle" class="w-8 h-8"></i>
         <span class="absolute right-full mr-4 bg-white text-royalBlue px-4 py-2 rounded-xl text-xs font-black shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
-            Consultar Disponibilidade
+            Falar no WhatsApp
         </span>
     </a>
 
@@ -127,7 +125,7 @@
             <div class="glass border border-white/20 rounded-full px-6 py-2 flex justify-between items-center shadow-xl shadow-black/5">
                 <div class="flex items-center gap-3">
                     <div class="relative w-12 h-12 rounded-full overflow-hidden border-2 border-sunYellow bg-royalBlue shrink-0">
-                        <img src="imagens/logopousada.jpg" alt="Logo" class="relative z-10 w-full h-full object-cover">
+                        <img src="logopousada.jpg" alt="Logo" class="relative z-10 w-full h-full object-cover">
                         <div class="absolute inset-0 flex items-center justify-center text-[8px] text-white font-bold bg-royalBlue uppercase">LOGO</div>
                     </div>
                     <div>
@@ -140,7 +138,7 @@
                     <a href="#home" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest">Início</a>
                     <a href="#acomodacoes" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest">Acomodações</a>
                     <a href="#faq" class="text-slate-700 hover:text-royalBlue transition-colors text-xs uppercase tracking-widest text-xs">Dúvidas</a>
-                    <a href="https://wa.me/5515998200523" class="bg-royalBlue text-white px-6 py-3 rounded-full hover:bg-blue-900 transition-all shadow-lg text-xs uppercase">
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20uma%20reserva." class="bg-royalBlue text-white px-6 py-3 rounded-full hover:bg-blue-900 transition-all shadow-lg text-xs uppercase">
                         Consultar Disponibilidade
                     </a>
                 </div>
@@ -155,13 +153,14 @@
             <a href="#home" class="block font-black text-xl">Início</a>
             <a href="#acomodacoes" class="block font-black text-xl">Acomodações</a>
             <a href="#faq" class="block font-black text-xl">Dúvidas Frequentes</a>
-            <a href="https://wa.me/5515998200523" class="block bg-sunYellow text-white text-center py-4 rounded-2xl font-black shadow-lg">CONSULTAR DISPONIBILIDADE</a>
+            <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20uma%20reserva." class="block bg-sunYellow text-white text-center py-4 rounded-2xl font-black shadow-lg">CONSULTAR DISPONIBILIDADE</a>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-royalBlue text-center px-6">
-        <img src="imagens/imagemprincipal.png" alt="Cenário PETAR" class="absolute inset-0 w-full h-full object-cover z-0">
+        <!-- Caminho da imagem: apenas o nome do arquivo -->
+        <img src="imagemprincipal.png" alt="Cenário PETAR" class="absolute inset-0 w-full h-full object-cover z-0">
         <div class="hero-overlay absolute inset-0 z-10"></div>
         
         <div class="relative z-20 max-w-5xl mx-auto">
@@ -174,7 +173,7 @@
             </p>
             
             <div class="reveal active flex justify-center">
-                <a href="https://wa.me/5515998200523" class="bg-sunYellow text-white px-12 py-5 rounded-full text-lg font-black hover:bg-amber-600 transition-all shadow-2xl flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95 uppercase tracking-widest">
+                <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20consultar%20disponibilidade%20para%20hospedagem." class="bg-sunYellow text-white px-12 py-5 rounded-full text-lg font-black hover:bg-amber-600 transition-all shadow-2xl flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95 uppercase tracking-widest">
                     Consultar Disponibilidade <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </a>
             </div>
@@ -203,9 +202,9 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             
             <!-- Kitenet -->
-            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
                 <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-kitenet.jpg" alt="Kitenet" class="relative z-10 w-full h-full object-cover">
+                    <img src="quarto-kitenet.jpg" alt="Kitenet" class="relative z-10 w-full h-full object-cover">
                     <div class="img-fallback">foto: quarto-kitenet.jpg</div>
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
@@ -219,14 +218,16 @@
                         <span class="text-2xl font-black text-natureGreen">R$ 250,00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
                     </div>
-                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Kitenet%20Terra%C3%A7o*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
+                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
 
             <!-- Quádruplo -->
-            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 100ms;">
                 <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-quadruplo.jpg" alt="Quádruplo" class="relative z-10 w-full h-full object-cover">
+                    <img src="quarto-quadruplo.jpg" alt="Quádruplo" class="relative z-10 w-full h-full object-cover">
                     <div class="img-fallback">foto: quarto-quadruplo.jpg</div>
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
@@ -240,14 +241,16 @@
                         <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
                     </div>
-                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20no%20*Quarto%20Qu%C3%A1druplo%20Superior*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
+                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
 
             <!-- Família -->
-            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 200ms;">
                 <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-familia.jpg" alt="Família" class="relative z-10 w-full h-full object-cover">
+                    <img src="quarto-familia.jpg" alt="Família" class="relative z-10 w-full h-full object-cover">
                     <div class="img-fallback">foto: quarto-familia.jpg</div>
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
@@ -261,14 +264,16 @@
                         <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Valor Fixo</span>
                     </div>
-                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg">Reserva agora</a>
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20no%20*Quarto%20Fam%C3%ADlia%20Superior*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
+                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
 
             <!-- Casal -->
-            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
                 <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-casal.jpg" alt="Casal" class="relative z-10 w-full h-full object-cover">
+                    <img src="quarto-casal.jpg" alt="Casal" class="relative z-10 w-full h-full object-cover">
                     <div class="img-fallback">foto: quarto-casal.jpg</div>
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
@@ -282,14 +287,16 @@
                         <span class="text-2xl font-black text-natureGreen">R$ 500.00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Valor p/ casal</span>
                     </div>
-                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20">Reserva agora</a>
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Su%C3%ADte%20Casal*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20 flex justify-center items-center gap-2">
+                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
 
             <!-- Camping -->
-            <div class="reveal bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
+            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
                 <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/area-camping.jpg" alt="Camping" class="relative z-10 w-full h-full object-cover">
+                    <img src="area-camping.jpg" alt="Camping" class="relative z-10 w-full h-full object-cover">
                     <div class="img-fallback">foto: area-camping.jpg</div>
                 </div>
                 <div class="p-8 flex-grow flex flex-col text-left">
@@ -303,7 +310,9 @@
                         <span class="text-2xl font-black text-natureGreen">R$ 80,00</span>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">A Diária</span>
                     </div>
-                    <a href="https://wa.me/5515998200523" class="w-full text-center bg-natureGreen text-white font-black py-4 rounded-2xl hover:bg-green-800 transition-all shadow-xl shadow-natureGreen/20">Reserva agora</a>
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Área%20de%20Camping*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-natureGreen text-white font-black py-4 rounded-2xl hover:bg-green-800 transition-all shadow-xl shadow-natureGreen/20 flex justify-center items-center gap-2">
+                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -316,34 +325,34 @@
             
             <div class="slider">
                 <div class="slide-track">
-                    <!-- Slides (1-10) -->
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
+                    <!-- Slides Originais -->
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
                     <!-- Duplicate for infinite loop -->
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
-                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria1.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria1.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria2.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria2.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria3.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria3.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria4.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria4.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria5.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria5.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria6.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria6.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria7.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria7.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria8.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria8.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria9.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria9.jpg</div></div></div>
+                    <div class="slide"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="galeria10.jpg" class="w-full h-full object-cover"><div class="img-fallback">galeria10.jpg</div></div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ SECTION (ACORDEÃO CORRIGIDO) -->
+    <!-- FAQ SECTION (ACORDEÃO FIXADO) -->
     <section id="faq" class="py-24 bg-white px-6 border-t">
         <div class="max-w-4xl mx-auto">
             <h2 class="reveal font-heading text-4xl font-black text-royalBlue mb-16 tracking-tighter uppercase text-center">Dúvidas Frequentes</h2>
@@ -352,7 +361,7 @@
                 
                 <!-- 1. Política de cancelamento -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">1. Política de cancelamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -367,7 +376,7 @@
 
                 <!-- 2. Localização -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">2. Aonde estamos localizados?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -383,7 +392,7 @@
 
                 <!-- 3. Pet Friendly -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">3. Pet Friendly com algumas regrinhas!</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -399,7 +408,7 @@
 
                 <!-- 4. Trabalho -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">4. Precisa trabalhar durante a estadia?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -412,7 +421,7 @@
 
                 <!-- 5. Alimentos -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">5. Posso levar alimentos e bebidas?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -426,7 +435,7 @@
 
                 <!-- 6. Pagamento -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">6. Formas de pagamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -439,7 +448,7 @@
 
                 <!-- 7. Horário -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">7. Horário de funcionamento</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -454,7 +463,7 @@
 
                 <!-- 8. Contato -->
                 <div class="reveal accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
-                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors hover:bg-slate-100">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none cursor-pointer transition-colors hover:bg-slate-100">
                         <span class="font-black text-royalBlue uppercase text-sm tracking-tight">8. Como entrar em contato?</span>
                         <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
@@ -477,7 +486,7 @@
             <div>
                 <div class="flex items-center gap-3 mb-8 justify-center md:justify-start">
                     <div class="relative w-10 h-10 rounded-full overflow-hidden border border-white/20 p-0.5 bg-royalBlue">
-                        <img src="imagens/logopousada.jpg" alt="Logo Footer" class="relative z-10 w-full h-full object-cover">
+                        <img src="logopousada.jpg" alt="Logo Footer" class="relative z-10 w-full h-full object-cover">
                     </div>
                     <span class="font-heading font-black text-white text-xl uppercase tracking-tighter">Chalés Morada do Sol PETAR</span>
                 </div>
@@ -513,21 +522,23 @@
     <script>
         lucide.createIcons();
 
+        // Menu Mobile
         const menuBtn = document.getElementById('menuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
 
-        // FAQ Logic - REFEITO para garantir funcionamento
+        // LÓGICA DO ACORDEÃO (CLIQUE E ABRE)
         const accordionHeaders = document.querySelectorAll('.accordion-header');
 
         accordionHeaders.forEach(header => {
             header.addEventListener('click', () => {
                 const item = header.parentElement;
+                const content = item.querySelector('.accordion-content');
                 const isActive = item.classList.contains('accordion-open');
 
-                // Fecha todos os outros itens
+                // Fecha outros itens (opcional - comportamento de acordeão exclusivo)
                 document.querySelectorAll('.accordion-item').forEach(otherItem => {
                     if (otherItem !== item) {
                         otherItem.classList.remove('accordion-open');
@@ -536,14 +547,13 @@
                     }
                 });
 
-                // Toggle do item atual
+                // Alterna o atual
                 if (isActive) {
                     item.classList.remove('accordion-open');
-                    item.querySelector('.accordion-content').style.maxHeight = null;
-                    item.querySelector('.accordion-content').style.opacity = 0;
+                    content.style.maxHeight = null;
+                    content.style.opacity = 0;
                 } else {
                     item.classList.add('accordion-open');
-                    const content = item.querySelector('.accordion-content');
                     content.style.maxHeight = content.scrollHeight + "px";
                     content.style.opacity = 1;
                 }
@@ -556,9 +566,9 @@
                 if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // Navbar Style on Scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 80) nav.classList.add('py-2');
