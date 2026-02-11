@@ -33,7 +33,6 @@
     </script>
     
     <style>
-        /* ANIMAÇÃO DE ENTRADA */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -43,8 +42,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* VIDRO E FUNDO */
         .glass {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
@@ -54,61 +51,134 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30, 58, 138, 0.85) 100%);
         }
         
-        /* ACORDEÃO (FAQ) FUNCIONAL */
-        .faq-answer {
+        /* ACORDEÃO (FAQ) */
+        .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out;
+            opacity: 0;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out, padding 0.4s ease;
         }
-        .faq-card.open .faq-answer {
-            /* max-height é setado via JS */
+        .accordion-item.accordion-open .accordion-content {
+            opacity: 1;
         }
-        .faq-card.open .faq-icon {
-            transform: rotate(180deg);
-        }
-        .faq-icon {
+        .accordion-icon {
             transition: transform 0.3s ease;
         }
-        .faq-card.open .faq-question {
+        .accordion-item.accordion-open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-item.accordion-open .accordion-header {
             color: #1e3a8a;
         }
 
-        /* FALLBACK PARA IMAGENS */
-        .img-fallback {
-            @apply absolute inset-0 flex flex-col items-center justify-center bg-slate-200 text-slate-500 font-bold uppercase text-[10px] text-center p-4 z-0;
-        }
-
-        /* CARROSSEL DRAGGABLE */
+        /* CARROSSEL DE GALERIA GERAL */
         .gallery-wrapper {
-            overflow-x: hidden;
+            overflow-x: auto;
             white-space: nowrap;
             cursor: grab;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-y;
+            scrollbar-width: none;
         }
-        .gallery-wrapper:active {
-            cursor: grabbing;
+        .gallery-wrapper::-webkit-scrollbar { display: none; }
+        .gallery-wrapper:active { cursor: grabbing; }
+        .gallery-track { display: inline-flex; gap: 1rem; padding-bottom: 20px; }
+        .gallery-item { flex: 0 0 300px; height: 300px; user-select: none; }
+
+        /* CARROSSEL DOS QUARTOS (MINI SLIDER) */
+        .room-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
-        .gallery-track {
-            display: inline-flex;
-            gap: 1rem;
-            padding-bottom: 20px;
+        .room-slider::-webkit-scrollbar { display: none; }
+        .room-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            scroll-snap-align: start;
         }
-        .gallery-item {
-            flex: 0 0 300px;
-            height: 300px;
-            user-select: none;
+
+        /* CONTAINER DE VÍDEO VERTICAL */
+        .video-phone-frame {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 9 / 16;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 4px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modal da Calculadora */
+        #calcModal {
+            transition: opacity 0.3s ease;
+        }
+        #calcModal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #calcModal:not(.hidden) {
+            opacity: 1;
+            pointer-events: auto;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans leading-relaxed">
 
+    <!-- MODAL CALCULADORA -->
+    <div id="calcModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 hidden px-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full relative shadow-2xl animate-[pulseSoft_0.3s_ease-out]">
+            <button onclick="closeCalc()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i data-lucide="x" class="w-6 h-6"></i></button>
+            
+            <h3 class="font-heading text-2xl font-black text-royalBlue mb-2">Simular Valor</h3>
+            <p id="modalRoomName" class="text-sm text-slate-500 font-bold uppercase tracking-widest mb-4">Suíte Família</p>
+            
+            <!-- Aviso Carnaval no Modal -->
+            <div class="bg-sunYellow/10 border border-sunYellow/30 rounded-xl p-3 mb-6 flex items-start gap-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-sunYellow shrink-0 mt-0.5"></i>
+                <div class="text-xs text-slate-600">
+                    <strong>Atenção Carnaval (13 a 18/02):</strong><br>
+                    O pacote mínimo obrigatório é de 5 diárias.
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pessoas</label>
+                    <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="updatePeople(-1)" class="p-3 bg-slate-100 hover:bg-slate-200"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                        <input type="number" id="numPeople" value="2" min="1" class="w-full text-center font-bold text-royalBlue outline-none" readonly>
+                        <button onclick="updatePeople(1)" class="p-3 bg-slate-100 hover:bg-slate-200"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Diárias</label>
+                    <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden">
+                        <button onclick="updateDays(-1)" class="p-3 bg-slate-100 hover:bg-slate-200"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                        <input type="number" id="numDays" value="1" min="1" class="w-full text-center font-bold text-royalBlue outline-none" readonly>
+                        <button onclick="updateDays(1)" class="p-3 bg-slate-100 hover:bg-slate-200"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
+                <p class="text-xs text-slate-400 uppercase font-bold">Total Estimado</p>
+                <p id="totalPrice" class="text-3xl font-black text-natureGreen">R$ 0,00</p>
+                <p class="text-[10px] text-slate-400 mt-1">*Valor por pessoa x dias</p>
+            </div>
+
+            <button id="btnZapCalc" onclick="sendZapCalc()" class="w-full mt-6 bg-[#25D366] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-green-600 transition-colors shadow-lg">
+                Reservar no WhatsApp <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- WHATSAPP FIXO -->
-    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Estou%20no%20site%20e%20gostaria%20de%20consultar%20disponibilidade%20para%20uma%20data." target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 group">
+    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Estou%20no%20site%20e%20gostaria%20de%20consultar%20disponibilidade." target="_blank" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 group">
         <i data-lucide="message-circle" class="w-8 h-8"></i>
-        <span class="absolute right-full mr-4 bg-white text-royalBlue px-4 py-2 rounded-xl text-xs font-black shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none uppercase tracking-widest">
-            Falar no WhatsApp
-        </span>
     </a>
 
     <!-- NAVBAR -->
@@ -149,25 +219,52 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-royalBlue text-center px-6">
+    <!-- HERO SECTION (COM VÍDEO RESTAURADO) -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-royalBlue pt-32 pb-12 px-6">
         <img src="imagens/imagemprincipal.png" alt="Cenário PETAR" class="absolute inset-0 w-full h-full object-cover z-0">
         <div class="hero-overlay absolute inset-0 z-10"></div>
         
-        <div class="relative z-20 max-w-5xl mx-auto">
-            <h1 class="reveal active font-heading text-4xl md:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tighter drop-shadow-2xl text-center">
-                Hospede-se no coração do <span class="text-sunYellow italic">PETAR</span>, e encante-se com as paisagens naturais!
-            </h1>
+        <!-- Grid para Vídeo e Texto -->
+        <div class="relative z-20 w-full max-w-7xl grid lg:grid-cols-2 gap-12 items-center">
             
-            <p class="reveal active text-lg md:text-2xl text-blue-50/90 mb-12 font-medium max-w-3xl mx-auto leading-relaxed">
-                Oferecemos hospedagem, orientação e total suporte para que você explore os melhores roteiros da região!
-            </p>
-            
-            <div class="reveal active flex justify-center">
-                <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20consultar%20disponibilidade%20para%20hospedagem." class="bg-sunYellow text-white px-12 py-5 rounded-full text-lg font-black hover:bg-amber-600 transition-all shadow-2xl flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95 uppercase tracking-widest">
-                    Consultar Disponibilidade <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                </a>
+            <!-- Texto -->
+            <div class="text-center lg:text-left order-2 lg:order-1">
+                <div class="reveal active inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                    <span class="flex h-2 w-2 rounded-full bg-sunYellow animate-pulse"></span>
+                    Aventura e Conforto
+                </div>
+
+                <h1 class="reveal active font-heading text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-[1.1] tracking-tighter drop-shadow-2xl">
+                    Hospede-se no coração do <span class="text-sunYellow italic">PETAR</span>, e encante-se!
+                </h1>
+                
+                <p class="reveal active text-lg text-blue-100/90 mb-10 font-medium leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    Oferecemos hospedagem, orientação e total suporte para que você explore os melhores roteiros da região com tranquilidade.
+                </p>
+                
+                <div class="reveal active flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Vi%20o%20site%20e%20gostaria%20de%20consultar%20disponibilidade%20para%20hospedagem." class="bg-sunYellow text-white px-10 py-4 rounded-full text-lg font-black hover:bg-amber-600 transition-all shadow-xl flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95 uppercase tracking-widest">
+                        Consultar Disponibilidade <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
             </div>
+
+            <!-- Vídeo -->
+            <div class="flex justify-center lg:justify-end order-1 lg:order-2 reveal active">
+                <div class="video-phone-frame">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/8WkFDlEUro4?rel=0&modestbranding=1&playsinline=1&controls=1&autoplay=0&mute=0&loop=1&playlist=8WkFDlEUro4" 
+                        title="Chalé Morada do Sol" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen 
+                        class="absolute inset-0 w-full h-full object-cover">
+                    </iframe>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -178,141 +275,200 @@
                 "Depois de passar o dia no PETAR, nada melhor do que voltar pro chalé e curtir a noite com calma. As crianças se divertem assando marshmallow, os adultos relaxam, e todo mundo aproveita o tempo junto, sem pressa e sem barulho."
             </p>
             <span class="bg-royalBlue/5 text-royalBlue px-6 py-2 rounded-full font-black text-xs uppercase tracking-widest">
-                Chalés Morada do Sol PETAR aventura garantida
+                Seu refúgio no PETAR
             </span>
         </div>
     </section>
 
-    <!-- ACOMODAÇÕES -->
+    <!-- DESTAQUES VISUAIS -->
+    <section class="w-full bg-slate-900 border-b border-white/10 py-16 px-4">
+        <div class="max-w-xl mx-auto space-y-12">
+            <div class="reveal relative aspect-square w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 group">
+                <img src="imagens/varanda-eventos.jpg" alt="Varanda" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            </div>
+            <div class="reveal relative aspect-[3/4] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 group">
+                <img src="imagens/caverna-agua.jpg" alt="Caverna" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            </div>
+            <div class="reveal relative aspect-square w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 group">
+                <img src="imagens/caverna-ampla.jpg" alt="Caverna Ampla" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            </div>
+        </div>
+    </section>
+
+    <!-- ACOMODAÇÕES (ATUALIZADO COM DESCONTOS) -->
     <section id="acomodacoes" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="reveal text-center mb-20">
+        <div class="reveal text-center mb-12">
             <h2 class="font-heading text-4xl md:text-5xl font-black text-royalBlue mb-6 tracking-tighter uppercase">Nossas Acomodações</h2>
             <div class="w-20 h-2 bg-sunYellow mx-auto rounded-full"></div>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            
-            <!-- Kitenet -->
-            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-kitenet.jpg" alt="Kitenet" class="relative z-10 w-full h-full object-cover">
-                    <div class="img-fallback">foto: quarto-kitenet.jpg</div>
-                </div>
-                <div class="p-8 flex-grow flex flex-col text-left">
-                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Kitenet - terraço</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Uma suíte maior equipada com utensílios de cozinha. Recomendado para casal e grupos de até 6 pessoas. Mínimo de 3 diárias para reserva.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
-                        <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-royalBlue"></i> 6 Camas</li>
-                        <li class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-royalBlue"></i> Cozinha equipada</li>
-                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
-                    </ul>
-                    <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 250,00</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
-                    </div>
-                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Kitenet%20Terra%C3%A7o*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
-                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
-                    </a>
-                </div>
+        <!-- AVISO DE CARNAVAL -->
+        <div class="reveal max-w-2xl mx-auto bg-sunYellow/10 border-2 border-sunYellow/50 rounded-2xl p-6 mb-16 text-center shadow-lg">
+            <div class="flex items-center justify-center gap-2 text-sunYellow font-black uppercase tracking-widest text-sm mb-2">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i> Aviso Importante
             </div>
+            <p class="text-slate-800 font-bold text-lg">Carnaval (13/02 a 18/02): Mínimo de 5 diárias</p>
+            <p class="text-slate-500 text-sm mt-1">Para outros períodos, reservas a partir de 1 diária.</p>
+        </div>
 
-            <!-- Quádruplo -->
-            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-quadruplo.jpg" alt="Quádruplo" class="relative z-10 w-full h-full object-cover">
-                    <div class="img-fallback">foto: quarto-quadruplo.jpg</div>
-                </div>
-                <div class="p-8 flex-grow flex flex-col text-left">
-                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Quádruplo Superior</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Quarto Quádruplo andar superior com uma visita linda para o jardim e a mata atlântica. Grupos de até 4 pessoas.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
-                        <li class="flex items-center gap-3"><i data-lucide="bed-double" class="w-5 h-5 text-royalBlue"></i> 4 Beliches</li>
-                        <li class="flex items-center gap-3"><i data-lucide="flower-2" class="w-5 h-5 text-royalBlue"></i> Vista Jardim</li>
-                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
-                    </ul>
-                    <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">por pessoa</span>
+        <!-- ANDAR SUPERIOR -->
+        <div class="reveal mb-16">
+            <h3 class="text-xl font-black text-natureGreen uppercase tracking-[0.2em] mb-8 border-l-4 border-sunYellow pl-4">Andar Superior</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                <!-- Suíte Família -->
+                <div class="card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="relative h-64 bg-slate-200 overflow-hidden group">
+                        <div class="room-slider h-full" data-interval="0">
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/familia1.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 1</div>
+                            <div class="room-slide bg-slate-200 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/familia2.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 2</div>
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/familia3.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 3</div>
+                        </div>
+                        <div class="absolute top-6 left-6 bg-royalBlue/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-10">3 Unidades</div>
+                        <div class="absolute bottom-4 right-4 bg-black/50 text-white text-[9px] px-2 py-1 rounded pointer-events-none">Arraste p/ ver mais</div>
                     </div>
-                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20no%20*Quarto%20Qu%C3%A1druplo%20Superior*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
-                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
-                    </a>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="font-heading text-2xl font-black text-royalBlue mb-2">Suíte Família</h4>
+                        <div class="flex items-center gap-2 mb-4 text-sm font-bold text-slate-400">
+                            <i data-lucide="users" class="w-4 h-4"></i> Até 4 pessoas
+                        </div>
+                        <ul class="space-y-3 mb-8 text-slate-700 text-sm font-bold">
+                            <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-sunYellow"></i> 1 Cama Casal</li>
+                            <li class="flex items-center gap-3"><i data-lucide="layers" class="w-5 h-5 text-sunYellow"></i> 1 Beliche</li>
+                            <li class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-5 h-5 text-sunYellow"></i> Mínimo de 1 diária*</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <!-- PREÇO COM DESCONTO -->
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-sm text-slate-400 line-through font-bold">R$ 280,00</span>
+                                <span class="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-wider">Oferta Site</span>
+                            </div>
+                            <p class="text-2xl font-black text-natureGreen mb-4">R$ 250,00 <span class="text-xs text-slate-400 font-bold uppercase">/ pessoa</span></p>
+                            
+                            <button onclick="openCalc('Suíte Família', 250)" class="w-full text-center bg-slate-100 text-royalBlue font-black py-3 rounded-xl hover:bg-sunYellow hover:text-white transition-all mb-2 shadow-sm border border-slate-200">Simular Valor</button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Suíte Grupo -->
+                <div class="card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="relative h-64 bg-slate-200 overflow-hidden group">
+                        <div class="room-slider h-full" data-interval="1000">
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/grupo1.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 1</div>
+                            <div class="room-slide bg-slate-200 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/grupo2.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 2</div>
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/grupo3.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 3</div>
+                        </div>
+                        <div class="absolute top-6 left-6 bg-skyBlue/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-10">1 Unidade</div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="font-heading text-2xl font-black text-royalBlue mb-2">Suíte Grupo</h4>
+                        <div class="flex items-center gap-2 mb-4 text-sm font-bold text-slate-400">
+                            <i data-lucide="users" class="w-4 h-4"></i> Até 4 pessoas
+                        </div>
+                        <ul class="space-y-3 mb-8 text-slate-700 text-sm font-bold">
+                            <li class="flex items-center gap-3"><i data-lucide="layers" class="w-5 h-5 text-sunYellow"></i> 2 Beliches</li>
+                            <li class="flex items-center gap-3"><i data-lucide="mountain" class="w-5 h-5 text-sunYellow"></i> Vista Mata</li>
+                            <li class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-5 h-5 text-sunYellow"></i> Mínimo de 1 diária*</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <!-- PREÇO COM DESCONTO -->
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-sm text-slate-400 line-through font-bold">R$ 280,00</span>
+                                <span class="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-wider">Oferta Site</span>
+                            </div>
+                            <p class="text-2xl font-black text-natureGreen mb-4">R$ 200,00 <span class="text-xs text-slate-400 font-bold uppercase">/ pessoa</span></p>
+                            
+                            <button onclick="openCalc('Suíte Grupo', 200)" class="w-full text-center bg-slate-100 text-royalBlue font-black py-3 rounded-xl hover:bg-sunYellow hover:text-white transition-all mb-2 shadow-sm border border-slate-200">Simular Valor</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-            <!-- Família -->
-            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-familia.jpg" alt="Família" class="relative z-10 w-full h-full object-cover">
-                    <div class="img-fallback">foto: quarto-familia.jpg</div>
-                </div>
-                <div class="p-8 flex-grow flex flex-col text-left">
-                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Família Superior</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Sinta tranquilidade e o charme desse lugar. Ideal para família ou grupo de até 4 pessoas.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
-                        <li class="flex items-center gap-3"><i data-lucide="bed" class="w-5 h-5 text-royalBlue"></i> 3 Camas</li>
-                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
-                    </ul>
-                    <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 200,00</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">Valor Fixo</span>
+        <!-- TÉRREO -->
+        <div class="reveal">
+            <h3 class="text-xl font-black text-natureGreen uppercase tracking-[0.2em] mb-8 border-l-4 border-sunYellow pl-4">Térreo / Terraço</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                <!-- Suíte Cozinha Gourmet -->
+                <div class="card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="relative h-64 bg-slate-200 overflow-hidden group">
+                        <div class="room-slider h-full" data-interval="2000">
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/cozinha1.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 1</div>
+                            <div class="room-slide bg-slate-200 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/cozinha2.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 2</div>
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/cozinha3.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 3</div>
+                        </div>
+                        <div class="absolute top-6 left-6 bg-natureGreen/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-10">Completa</div>
                     </div>
-                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20no%20*Quarto%20Fam%C3%ADlia%20Superior*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-lg flex justify-center items-center gap-2">
-                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
-                    </a>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="font-heading text-2xl font-black text-royalBlue mb-2">Suíte Cozinha Gourmet</h4>
+                        <div class="flex items-center gap-2 mb-4 text-sm font-bold text-slate-400">
+                            <i data-lucide="users" class="w-4 h-4"></i> Até 6 pessoas
+                        </div>
+                        <ul class="space-y-3 mb-8 text-slate-700 text-sm font-bold">
+                            <li class="flex items-center gap-3"><i data-lucide="utensils-cross-over" class="w-5 h-5 text-sunYellow"></i> Cozinha Gourmet</li>
+                            <li class="flex items-center gap-3"><i data-lucide="bed-double" class="w-5 h-5 text-sunYellow"></i> Casal + Beliches</li>
+                            <li class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-5 h-5 text-sunYellow"></i> Mínimo de 1 diária*</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-2xl font-black text-natureGreen mb-4">R$ 500,00 <span class="text-xs text-slate-400 font-bold uppercase">/ pessoa</span></p>
+                            <button onclick="openCalc('Suíte Cozinha', 500)" class="w-full text-center bg-slate-100 text-royalBlue font-black py-3 rounded-xl hover:bg-sunYellow hover:text-white transition-all mb-2 shadow-sm border border-slate-200">Simular Valor</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Casal -->
-            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/quarto-casal.jpg" alt="Casal" class="relative z-10 w-full h-full object-cover">
-                    <div class="img-fallback">foto: quarto-casal.jpg</div>
-                </div>
-                <div class="p-8 flex-grow flex flex-col text-left">
-                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Suíte Casal</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Suíte casal andar superior. Romantismo flores pássaros natureza beleza encantadora.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
-                        <li class="flex items-center gap-3"><i data-lucide="heart" class="w-5 h-5 text-royalBlue"></i> 1 Cama Casal</li>
-                        <li class="flex items-center gap-3"><i data-lucide="flower" class="w-5 h-5 text-royalBlue"></i> Vista Natureza</li>
-                        <li class="flex items-center gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-royalBlue"></i> Mín. 3 diárias</li>
-                    </ul>
-                    <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 500.00</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">Valor p/ casal</span>
+                <!-- Suíte Bancada (Terraço) -->
+                <div class="card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="relative h-64 bg-slate-200 overflow-hidden group">
+                        <div class="room-slider h-full" data-interval="3000">
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/bancada1.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 1</div>
+                            <div class="room-slide bg-slate-200 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/bancada2.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 2</div>
+                            <div class="room-slide bg-slate-300 flex items-center justify-center text-[10px] text-slate-500 uppercase font-bold"><img src="imagens/bancada3.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">Foto 3</div>
+                        </div>
+                        <div class="absolute top-6 left-6 bg-royalBlue/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-10">Terraço</div>
                     </div>
-                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Su%C3%ADte%20Casal*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-royalBlue text-white font-black py-4 rounded-2xl hover:bg-blue-900 transition-all shadow-xl shadow-royalBlue/20 flex justify-center items-center gap-2">
-                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
-                    </a>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="font-heading text-2xl font-black text-royalBlue mb-2">Suíte Bancada Gourmet</h4>
+                        <div class="flex items-center gap-2 mb-4 text-sm font-bold text-slate-400">
+                            <i data-lucide="users" class="w-4 h-4"></i> Até 6 pessoas
+                        </div>
+                        <ul class="space-y-3 mb-8 text-slate-700 text-sm font-bold">
+                            <li class="flex items-center gap-3"><i data-lucide="chef-hat" class="w-5 h-5 text-sunYellow"></i> Bancada + Utensílios</li>
+                            <li class="flex items-center gap-3"><i data-lucide="home" class="w-5 h-5 text-sunYellow"></i> Espaço Terraço</li>
+                            <li class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-5 h-5 text-sunYellow"></i> Mínimo de 1 diária*</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-2xl font-black text-natureGreen mb-4">R$ 300,00 <span class="text-xs text-slate-400 font-bold uppercase">/ pessoa</span></p>
+                            <button onclick="openCalc('Suíte Bancada', 300)" class="w-full text-center bg-slate-100 text-royalBlue font-black py-3 rounded-xl hover:bg-sunYellow hover:text-white transition-all mb-2 shadow-sm border border-slate-200">Simular Valor</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Camping -->
-            <div class="reveal card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col hover:-translate-y-2 transition-transform duration-300">
-                <div class="relative h-64 bg-slate-200 overflow-hidden">
-                    <img src="imagens/area-camping.jpg" alt="Camping" class="relative z-10 w-full h-full object-cover">
-                    <div class="img-fallback">foto: area-camping.jpg</div>
-                </div>
-                <div class="p-8 flex-grow flex flex-col text-left">
-                    <h3 class="font-heading text-2xl font-black text-royalBlue mb-4">Camping</h3>
-                    <p class="text-sm text-slate-600 mb-6 font-medium">Temos o espaço ideal pra vocês aventureiro desbravadores cercado de muro privacidade total em meio a natureza.</p>
-                    <ul class="space-y-3 mb-8 text-slate-800 text-sm font-bold flex-grow">
-                        <li class="flex items-center gap-3"><i data-lucide="tent" class="w-5 h-5 text-royalBlue"></i> Área Ampla</li>
-                        <li class="flex items-center gap-3"><i data-lucide="shield-check" class="w-5 h-5 text-royalBlue"></i> Cercado</li>
-                        <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-royalBlue"></i> Wi-Fi</li>
-                    </ul>
-                    <div class="mb-6 flex justify-between items-end border-t pt-4">
-                        <span class="text-2xl font-black text-natureGreen">R$ 80,00</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">A Diária</span>
+                <!-- Camping -->
+                <div class="card-hover bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="relative h-64 bg-slate-200 overflow-hidden group">
+                         <img src="imagens/area-camping.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'">
+                         <div class="img-fallback">foto: area-camping.jpg</div>
+                         <div class="absolute top-6 left-6 bg-natureGreen/90 backdrop-blur-md text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest z-10">Aventura</div>
                     </div>
-                    <a href="https://wa.me/5515998200523?text=Ol%C3%A1!%20Tenho%20interesse%20na%20*Área%20de%20Camping*.%20Gostaria%20de%20saber%20a%20disponibilidade." class="w-full text-center bg-natureGreen text-white font-black py-4 rounded-2xl hover:bg-green-800 transition-all shadow-xl shadow-natureGreen/20 flex justify-center items-center gap-2">
-                        Reserva agora <i data-lucide="message-square" class="w-4 h-4"></i>
-                    </a>
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="font-heading text-2xl font-black text-royalBlue mb-2">Camping</h4>
+                        <div class="flex items-center gap-2 mb-4 text-sm font-bold text-slate-400">
+                            <i data-lucide="tent" class="w-4 h-4"></i> Aventureiros
+                        </div>
+                        <ul class="space-y-3 mb-8 text-slate-700 text-sm font-bold">
+                            <li class="flex items-center gap-3"><i data-lucide="shield-check" class="w-5 h-5 text-sunYellow"></i> Murado e Seguro</li>
+                            <li class="flex items-center gap-3"><i data-lucide="wifi" class="w-5 h-5 text-sunYellow"></i> Wi-Fi disponível</li>
+                            <li class="flex items-center gap-3"><i data-lucide="calendar-check" class="w-5 h-5 text-sunYellow"></i> Mínimo de 1 diária*</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="text-2xl font-black text-natureGreen mb-4">R$ 80,00 <span class="text-xs text-slate-400 font-bold uppercase">/ pessoa</span></p>
+                            <button onclick="openCalc('Camping', 80)" class="w-full text-center bg-slate-100 text-royalBlue font-black py-3 rounded-xl hover:bg-sunYellow hover:text-white transition-all mb-2 shadow-sm border border-slate-200">Simular Valor</button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -324,7 +480,7 @@
             
             <div id="gallery-container" class="gallery-wrapper">
                 <div class="gallery-track" id="gallery-track">
-                    <!-- Slides Originais (1-10) -->
+                    <!-- Slides (1-10) -->
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria1.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria2.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria3.jpg</div></div></div>
@@ -335,8 +491,7 @@
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria8.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria8.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria9.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria9.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria10.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria10.jpg</div></div></div>
-                    
-                    <!-- Duplicados para efeito infinito -->
+                    <!-- Duplicate for infinite loop -->
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria1.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria1.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria2.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria2.jpg</div></div></div>
                     <div class="gallery-item"><div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-300 border-4 border-white/50"><img src="imagens/galeria3.jpg" class="w-full h-full object-cover pointer-events-none"><div class="img-fallback">galeria3.jpg</div></div></div>
@@ -351,20 +506,20 @@
         </div>
     </section>
 
-    <!-- FAQ SECTION (CORRIGIDA) -->
+    <!-- FAQ SECTION (ACORDEÃO FIXADO) -->
     <section id="faq" class="py-24 bg-white px-6 border-t">
         <div class="max-w-4xl mx-auto">
             <h2 class="reveal font-heading text-4xl font-black text-royalBlue mb-16 tracking-tighter uppercase text-center">Dúvidas Frequentes</h2>
 
             <div class="space-y-4">
                 
-                <!-- 1 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">1. Política de cancelamento</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 1. Política de cancelamento -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">1. Política de cancelamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Cancelamento com até 15 dias da data de entrada – devolução integral do valor do sinal</p>
                             <p>Cancelamento de 7 à 14 dias da data de entrada – devolução de 50% do sinal ou crédito de 100% para reagendar outra data;</p>
@@ -373,13 +528,13 @@
                     </div>
                 </div>
 
-                <!-- 2 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">2. Aonde estamos localizados?</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 2. Localização -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">2. Aonde estamos localizados?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Estamos no coração do PETAR 💚</p>
                             <p>📍 Estr. do Alambari, 565 – Serra, Iporanga/SP</p>
@@ -389,13 +544,13 @@
                     </div>
                 </div>
 
-                <!-- 3 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">3. Pet Friendly com algumas regrinhas!</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 3. Pet Friendly -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">3. Pet Friendly com algumas regrinhas!</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Animais de pequeno porte são bem-vindos 💛</p>
                             <p>Só pedimos que fiquem sempre com os tutores e <strong>não subam em camas ou sofás</strong>.</p>
@@ -405,26 +560,26 @@
                     </div>
                 </div>
 
-                <!-- 4 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">4. Precisa trabalhar durante a estadia?</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 4. Trabalho -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">4. Precisa trabalhar durante a estadia?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p>Temos wi-fi e mesas confortáveis pra você se conectar, fazer reuniões ou colocar o trabalho em dia com toda tranquilidade.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">5. Posso levar alimentos e bebidas?</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 5. Alimentos -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">5. Posso levar alimentos e bebidas?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p class="font-bold text-natureGreen mb-2">PODE SIM!</p>
                             <p>Fique à vontade para trazer seus alimentos e bebidas e aproveitar seus momentos no chalé do jeitinho que preferir.</p>
@@ -432,26 +587,26 @@
                     </div>
                 </div>
 
-                <!-- 6 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">6. Formas de pagamento</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 6. Pagamento -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">6. Formas de pagamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 border-t font-medium border-slate-200 bg-white">
                             <p>Aceitamos pagamentos em PIX, cartão de débito e crédito.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 7 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">7. Horário de funcionamento</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 7. Horário -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">7. Horário de funcionamento</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Reservas: atendimento das 8h às 21h00</p>
                             <p>Café da manhã: das 7h às 9h</p>
@@ -460,13 +615,13 @@
                     </div>
                 </div>
 
-                <!-- 8 -->
-                <div class="reveal faq-card bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
-                    <button class="w-full p-6 text-left flex justify-between items-center outline-none" onclick="toggleFaq(this)">
-                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight faq-question">8. Como entrar em contato?</span>
-                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-sunYellow"></i>
+                <!-- 8. Contato -->
+                <div class="accordion-item bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden cursor-pointer hover:bg-slate-100 transition-colors">
+                    <button class="accordion-header w-full p-6 text-left flex justify-between items-center outline-none transition-colors" onclick="toggleFaq(this)">
+                        <span class="font-black text-royalBlue uppercase text-sm tracking-tight">8. Como entrar em contato?</span>
+                        <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 text-sunYellow transition-transform"></i>
                     </button>
-                    <div class="faq-answer">
+                    <div class="accordion-content">
                         <div class="p-8 text-sm text-slate-600 space-y-4 border-t font-medium border-slate-200 bg-white">
                             <p>Estamos prontos para atende-los!</p>
                             <p>Nos envie uma mensagem PELO WHATSAPP</p>
@@ -531,19 +686,23 @@
         // FAQ Toggle
         function toggleFaq(button) {
             const item = button.parentElement;
-            const content = item.querySelector('.faq-answer');
-            const isOpen = item.classList.contains('open');
-
-            // Fechar todos
-            document.querySelectorAll('.faq-card').forEach(card => {
-                card.classList.remove('open');
-                card.querySelector('.faq-answer').style.maxHeight = null;
+            const isActive = item.classList.contains('accordion-open');
+            document.querySelectorAll('.accordion-item').forEach(el => {
+                if (el !== item) {
+                    el.classList.remove('accordion-open');
+                    el.querySelector('.accordion-content').style.maxHeight = null;
+                    el.querySelector('.accordion-content').style.opacity = 0;
+                }
             });
-
-            // Abrir o clicado
-            if (!isOpen) {
-                item.classList.add('open');
+            if (isActive) {
+                item.classList.remove('accordion-open');
+                item.querySelector('.accordion-content').style.maxHeight = null;
+                item.querySelector('.accordion-content').style.opacity = 0;
+            } else {
+                item.classList.add('accordion-open');
+                const content = item.querySelector('.accordion-content');
                 content.style.maxHeight = content.scrollHeight + "px";
+                content.style.opacity = 1;
             }
         }
 
@@ -562,7 +721,7 @@
             else nav.classList.remove('py-2');
         });
 
-        // LÓGICA DO CARROSSEL HÍBRIDO (AUTO + DRAG)
+        // LÓGICA DO CARROSSEL HÍBRIDO (AUTO + DRAG + TOUCH)
         const container = document.getElementById('gallery-container');
         const track = document.getElementById('gallery-track');
         
@@ -575,8 +734,7 @@
         // Função de rolagem automática suave
         function autoScroll() {
             if (!isHovered && !isDown) {
-                container.scrollLeft += 1; // Velocidade lenta
-                // Loop infinito (reset suave)
+                container.scrollLeft += 1; 
                 if (container.scrollLeft >= (container.scrollWidth / 2)) {
                     container.scrollLeft = 0;
                 }
@@ -587,7 +745,7 @@
         // Eventos do Mouse (PC)
         container.addEventListener('mousedown', (e) => {
             isDown = true;
-            container.classList.add('active');
+            container.style.cursor = 'grabbing';
             startX = e.pageX - container.offsetLeft;
             scrollLeft = container.scrollLeft;
             // Não paramos o loop, apenas bloqueamos o autoScroll via flag
@@ -596,7 +754,7 @@
         container.addEventListener('mouseleave', () => {
             isDown = false;
             isHovered = false;
-            container.classList.remove('active');
+            container.style.cursor = 'grab';
         });
 
         container.addEventListener('mouseenter', () => {
@@ -605,7 +763,9 @@
 
         container.addEventListener('mouseup', () => {
             isDown = false;
-            container.classList.remove('active');
+            container.style.cursor = 'grab';
+            // Retoma a animação se o mouse sair ou soltar
+            if (!isHovered) requestAnimationFrame(autoScroll);
         });
 
         container.addEventListener('mousemove', (e) => {
@@ -642,6 +802,67 @@
         // Inicia o loop
         requestAnimationFrame(autoScroll);
 
+        // MINI-CARROSSEL DOS QUARTOS
+        document.querySelectorAll('.room-slider').forEach(slider => {
+            const slides = slider.querySelectorAll('.room-slide');
+            const total = slides.length;
+            let current = 0;
+            // Configurar timer
+            setInterval(() => {
+                current = (current + 1) % total;
+                slider.scrollTo({
+                    left: slider.offsetWidth * current,
+                    behavior: 'smooth'
+                });
+            }, 4000); // 4 segundos
+        });
+
+        // CALCULADORA LÓGICA
+        let currentPricePerPerson = 0;
+        let currentRoomTitle = "";
+
+        function openCalc(roomName, price) {
+            currentPricePerPerson = price;
+            currentRoomTitle = roomName;
+            document.getElementById('modalRoomName').innerText = roomName;
+            document.getElementById('calcModal').classList.remove('hidden');
+            updateTotal();
+        }
+
+        function closeCalc() {
+            document.getElementById('calcModal').classList.add('hidden');
+        }
+
+        function updatePeople(change) {
+            const el = document.getElementById('numPeople');
+            let val = parseInt(el.value) + change;
+            if (val < 1) val = 1;
+            el.value = val;
+            updateTotal();
+        }
+
+        function updateDays(change) {
+            const el = document.getElementById('numDays');
+            let val = parseInt(el.value) + change;
+            if (val < 1) val = 1; // Minimo 1 diária
+            el.value = val;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const people = parseInt(document.getElementById('numPeople').value);
+            const days = parseInt(document.getElementById('numDays').value);
+            const total = currentPricePerPerson * people * days;
+            document.getElementById('totalPrice').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function sendZapCalc() {
+            const people = document.getElementById('numPeople').value;
+            const days = document.getElementById('numDays').value;
+            const total = document.getElementById('totalPrice').innerText;
+            const text = `Olá! Gostaria de reservar a *${currentRoomTitle}* para *${people} pessoas* por *${days} dias*. O site estimou *${total}*. Tem disponibilidade?`;
+            window.open(`https://wa.me/5515998200523?text=${encodeURIComponent(text)}`, '_blank');
+        }
     </script>
 </body>
 </html>
